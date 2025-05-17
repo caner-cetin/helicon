@@ -116,8 +116,8 @@ type TweetDetailFeatures struct {
 }
 
 // NewTweetDetailFeatures returns new [TweetDetailFeatures] All true by default, please adjust the features you dont want.
-func NewTweetDetailFeatures() *TweetDetailFeatures {
-	return &TweetDetailFeatures{
+func NewTweetDetailFeatures() TweetDetailFeatures {
+	return TweetDetailFeatures{
 		RwebVideoScreenEnabled:                                         true,
 		ProfileLabelImprovementsPcfLabelInPostEnabled:                  true,
 		RwebTipjarConsumptionEnabled:                                   true,

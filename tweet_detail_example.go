@@ -1,3 +1,7 @@
+// usage: [cmd] tweet_id
+// example tweet: https://x.com/gock/status/134738021831557120
+// example response: https://paste.rs/IyFuJ.json
+// response may vary depending on features, toggles or variables turned off
 package main
 
 import (
@@ -31,7 +35,7 @@ func main() {
 	}
 	var request = models.NewTweetDetailRequest(
 		models.NewTweetDetailVariables(os.Args[1]),
-		*models.NewTweetDetailFeatures(),
+		models.NewTweetDetailFeatures(),
 		models.NewTweetDetailFieldToggles())
 	resp, err := helicon.GetTweetDetails(*request)
 	if err != nil {
