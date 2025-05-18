@@ -1,10 +1,27 @@
-package models
+package helicon
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/url"
 )
+
+func (h *Helicon) GetTweetDetails(request TweetDetailRequest) (*TweetDetailResponse, error) {
+	uri, err := request.GetURL()
+	if err != nil {
+		return nil, err
+	}
+	body, err := h.hitApi(*uri)
+	if err != nil {
+		return nil, err
+	}
+	var response TweetDetailResponse
+	if err := json.NewDecoder(bytes.NewReader(body)).Decode(&response); err != nil {
+		return nil, fmt.Errorf("failed to decode response body: %w", err)
+	}
+	return &response, nil
+}
 
 const QueryId = "1RFzrZSUoVSgHzVK4MHWlg"
 
@@ -181,19 +198,19 @@ func NewTweetDetailRequest(variables TweetDetailVariables, features TweetDetailF
 func (r TweetDetailRequest) GetURL() (*string, error) {
 	variablesJSON, err := json.Marshal(r.Variables)
 	if err != nil {
-		return nil, fmt.Errorf("error marshalling variables: %v", err)
+		return nil, fmt.Errorf("error marshalling variables: %w", err)
 	}
 	encodedVariables := url.QueryEscape(string(variablesJSON))
 
 	featuresJSON, err := json.Marshal(r.Features)
 	if err != nil {
-		return nil, fmt.Errorf("error marshalling features: %v", err)
+		return nil, fmt.Errorf("error marshalling features: %w", err)
 	}
 	encodedFeatures := url.QueryEscape(string(featuresJSON))
 
 	fieldTogglesJSON, err := json.Marshal(r.FieldToggles)
 	if err != nil {
-		return nil, fmt.Errorf("error marshalling fieldToggles: %v", err)
+		return nil, fmt.Errorf("error marshalling fieldToggles: %w", err)
 	}
 	encodedFieldToggles := url.QueryEscape(string(fieldTogglesJSON))
 
